@@ -1,5 +1,19 @@
 SKIPUNZIP=1
 
+MODULE_NAME="$( grep "^id=" $MODPATH/module.prop 2>/dev/null | cut -f2 -d "=" )"
+
+if [ 0 = 1 -o -r /data/local/tmp/debug ] ; then
+  LOGFILE="/data/local/tmp/${MODULE_NAME}_customize.log"
+
+  ui_print "Writing all messages to the log file ${LOGFILE}"
+  exec 1>${LOGFILE} 2>&1
+
+  if [ 0 = 1 -o -r /data/local/tmp/trace ] ; then
+    set -x
+  fi
+fi
+
+
 if [ "$BOOTMODE" ] && [ "$KSU" ]; then
     ui_print "- Installing from KernelSU app"
     ui_print "- KernelSU version: $KSU_KERNEL_VER_CODE (kernel) + $KSU_VER_CODE (ksud)"
@@ -103,6 +117,12 @@ test_mount_image() {
 
 create_ext4_image() {
     dd if=/dev/zero of="$1" bs=1024 count=100
+
+# 29.10.2026 /bs
+#   correct the SELinux context for the image file (this is necessary for Android 16)
+#
+    chcon u:object_r:shell_data_file:s0 "$1"
+
     /system/bin/mkfs.ext4 "$1" && return 0
     return 1
 }

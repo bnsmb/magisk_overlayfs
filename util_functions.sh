@@ -48,6 +48,12 @@ handle() {
 
 create_ext4_image() {
     dd if=/dev/zero of="$1" bs=1024 count=100
+
+# 29.10.2026 /bs 
+#  correct the SELinux context (necessary for Android 16)
+#
+    chcon u:object_r:shell_data_file:s0 "$1"
+
     /system/bin/mkfs.ext4 "$1" && return 0
     return 1
 }
