@@ -6,13 +6,6 @@
 
 This version of the Magisk module also works with  **Magisk v30.7**
 
-To create the Magisk Module:
-
-Download or clone the repo and run the script
-
-**create_zip.sh**
-
-in the directory with the files from the repository
 
 -----
 
