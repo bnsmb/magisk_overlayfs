@@ -119,7 +119,7 @@ create_ext4_image() {
     dd if=/dev/zero of="$1" bs=1024 count=100
 
 # 29.10.2026 /bs
-#   correct the SELinux context for the image file (this is necessary for Android 16)
+#   correct the SELinux context for the image file (this is necessary for Magisk v30.7)
 #
     chcon u:object_r:shell_data_file:s0 "$1"
 
